@@ -1,65 +1,140 @@
-import Image from "next/image";
+import Link from "next/link";
+import { groq } from "next-sanity";
+import { client } from "@/sanity/lib/client";
 
-export default function Home() {
+export const revalidate = 60;
+
+type PostListItem = {
+  _id: string;
+  title: string;
+  slug?: { current?: string };
+  publishedAt?: string;
+  categories?: { title?: string }[];
+  excerpt?: string;
+  featured?: boolean;
+  mainImageUrl?: string;
+  mainImageAlt?: string;
+};
+
+const LATEST_POSTS_QUERY = groq`
+  *[_type == "post" && defined(slug.current) && !(_id in path("drafts.**"))]
+  | order(coalesce(publishedAt, _createdAt) desc)[0...12]{
+    _id,
+    title,
+    excerpt,
+    featured,
+    slug,
+    "mainImageUrl": mainImage.asset->url,
+    "mainImageAlt": mainImage.alt,
+    publishedAt,
+    categories[]->{title}
+  }
+`;
+
+function formatDate(iso?: string) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  return d.toLocaleDateString("es-CL", { year: "numeric", month: "short", day: "2-digit" });
+}
+
+export default async function HomePage() {
+  const posts = await client.fetch<PostListItem[]>(LATEST_POSTS_QUERY);
+  const main = posts?.[0];
+  const rest = posts?.slice(1) ?? [];
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <main className="mx-auto max-w-3xl px-4 py-10">
+      <header className="mb-8">
+        <div className="text-sm opacity-70">El Diario del Bolsillo</div>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight">
+          Economía en simple, directo a tu bolsillo.
+        </h1>
+        <p className="mt-3 text-base opacity-80">
+          Lo importante del día explicado con ejemplos de vida real (supermercado, bencina, arriendo).
+        </p>
+      </header>
+
+      {/* Noticia del día */}
+      {main ? (
+        <section className="mb-10 rounded-2xl border border-white/10 bg-white/5 p-6">
+          <div className="mb-2 text-xs uppercase tracking-wide opacity-70">Portada del día</div>
+          <h2 className="text-2xl font-semibold leading-tight">
+            <Link className="hover:underline" href={`/posts/${main.slug?.current}`}>
+              {main.title}
+            </Link>
+          </h2>
+
+          <div className="mt-3 flex flex-wrap gap-2 text-sm opacity-80">
+            {main.publishedAt ? <span>{formatDate(main.publishedAt)}</span> : null}
+            {main.categories?.length ? (
+              <>
+                <span>•</span>
+                <span>
+                  {main.categories
+                    .map((c) => c?.title)
+                    .filter(Boolean)
+                    .join(", ")}
+                </span>
+              </>
+            ) : null}
+          </div>
+
+          {main.excerpt ? <p className="mt-4 text-sm opacity-85">{main.excerpt}</p> : null}
+
+          <div className="mt-4">
+            <Link
+              className="inline-flex items-center rounded-xl border border-white/15 px-4 py-2 text-sm hover:bg-white/10"
+              href={`/posts/${main.slug?.current}`}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+              Leer →
+            </Link>
+          </div>
+        </section>
+      ) : (
+        <section className="mb-10 rounded-2xl border border-white/10 bg-white/5 p-6">
+          <h2 className="text-lg font-semibold">Aún no hay posts publicados</h2>
+          <p className="mt-2 opacity-80">
+            Publica un post en <code className="opacity-90">/studio</code> y aparecerá aquí.
           </p>
+        </section>
+      )}
+
+      {/* Más noticias */}
+      <section>
+        <div className="mb-3 flex items-end justify-between">
+          <h3 className="text-lg font-semibold">Más noticias</h3>
+          <Link className="text-sm opacity-80 hover:underline" href="/posts">
+            Ver todas →
+          </Link>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="space-y-4">
+          {rest.map((p) => (
+            <article key={p._id} className="rounded-2xl border border-white/10 p-4 hover:bg-white/5">
+              <h4 className="font-medium">
+                <Link className="hover:underline" href={`/posts/${p.slug?.current}`}>
+                  {p.title}
+                </Link>
+              </h4>
+              <div className="mt-2 flex flex-wrap gap-2 text-sm opacity-75">
+                {p.publishedAt ? <span>{formatDate(p.publishedAt)}</span> : null}
+                {p.categories?.length ? (
+                  <>
+                    <span>•</span>
+                    <span>
+                      {p.categories
+                        .map((c) => c?.title)
+                        .filter(Boolean)
+                        .join(", ")}
+                    </span>
+                  </>
+                ) : null}
+              </div>
+              {p.excerpt ? <p className="mt-3 text-sm opacity-80">{p.excerpt}</p> : null}
+            </article>
+          ))}
         </div>
-      </main>
-    </div>
+      </section>
+    </main>
   );
 }
