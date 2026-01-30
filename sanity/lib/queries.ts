@@ -24,10 +24,10 @@ export const HOME_QUERY = groq`
       excerpt,
       featured,
       publishedAt,
-      "slug": slug.current,
+      "slug": { "current": slug.current },
       "mainImageUrl": mainImage.asset->url,
       "mainImageAlt": mainImage.alt,
-      categories[]->{title, "slug": slug.current}
+      categories[]->{title, "slug": { "current": slug.current }}
     },
 
   "today": *[_type == "post" && defined(slug.current) && !(_id in path("drafts.**"))]
@@ -37,8 +37,8 @@ export const HOME_QUERY = groq`
       excerpt,
       featured,
       publishedAt,
-      "slug": slug.current,
-      categories[]->{title, "slug": slug.current}
+      "slug": { "current": slug.current },
+      categories[]->{title, "slug": { "current": slug.current }}
     },
 
   "economiaInCategory": *[_type == "post" && defined(slug.current) && !(_id in path("drafts.**")) && "economia-en-simple" in categories[]->slug.current]
@@ -48,8 +48,8 @@ export const HOME_QUERY = groq`
       excerpt,
       featured,
       publishedAt,
-      "slug": slug.current,
-      categories[]->{title, "slug": slug.current}
+      "slug": { "current": slug.current },
+      categories[]->{title, "slug": { "current": slug.current }}
     },
 
   "economiaFallback": *[_type == "post" && defined(slug.current) && !(_id in path("drafts.**")) && (title match '*economía en simple*' || excerpt match '*economía en simple*')]
@@ -59,8 +59,8 @@ export const HOME_QUERY = groq`
       excerpt,
       featured,
       publishedAt,
-      "slug": slug.current,
-      categories[]->{title, "slug": slug.current}
+      "slug": { "current": slug.current },
+      categories[]->{title, "slug": { "current": slug.current }}
     },
 
   "latest": *[_type == "post" && defined(slug.current) && !(_id in path("drafts.**"))]
@@ -70,10 +70,10 @@ export const HOME_QUERY = groq`
       excerpt,
       featured,
       publishedAt,
-      "slug": slug.current,
+      "slug": { "current": slug.current },
       "mainImageUrl": mainImage.asset->url,
       "mainImageAlt": mainImage.alt,
-      categories[]->{title, "slug": slug.current}
+      categories[]->{title, "slug": { "current": slug.current }}
     }
 }
-`;
+`
