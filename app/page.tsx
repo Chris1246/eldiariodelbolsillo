@@ -82,8 +82,8 @@ export default async function HomePage() {
   }
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
-      <header className="mb-8">
+    <main className="mx-auto max-w-2xl px-6 py-10">
+      <header className="mb-6">
         <div className="text-sm opacity-70">El Diario del Bolsillo</div>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight">
           Economía en simple, directo a tu bolsillo.
@@ -97,9 +97,9 @@ export default async function HomePage() {
       {hero ? <HeroCard post={hero as HeroPost} /> : null}
 
       {/* Lo de hoy */}
-      <section className="mb-8">
+      <section className="mt-8">
         <SectionHeader title={`Lo de hoy`} href="/posts" />
-        <div className="space-y-4">
+        <div className="space-y-3">
           {today.map((p) => (
             <PostRow key={p._id} post={p} />
           ))}
@@ -107,21 +107,21 @@ export default async function HomePage() {
       </section>
 
       {/* Economía en simple */}
-      <section className="mb-8">
+      <section className="mt-8">
         <SectionHeader title={`Economía en simple`} href="/posts?category=economia-en-simple" />
-        <div className="space-y-4">
+        <div className="space-y-3">
           {economiaFinal.length ? (
             economiaFinal.map((p) => <PostRow key={p._id} post={p} />)
           ) : (
-            <p className="opacity-80">No hay artículos específicos de economía en simple aún.</p>
+            <p className="text-sm opacity-70">Más economía en simple pronto.</p>
           )}
         </div>
       </section>
 
       {/* Último */}
-      <section>
+      <section className="mt-8">
         <SectionHeader title={`Último`} href="/posts" />
-        <div className="space-y-4">
+        <div className="space-y-3">
           {latest.map((p) => (
             <PostRow key={p._id} post={p} />
           ))}

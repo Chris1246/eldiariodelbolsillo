@@ -55,11 +55,11 @@ export default function HeroCard({ post }: { post: Post }) {
           </Link>
         </h2>
 
-        <div className="mt-2 flex items-center gap-3 text-sm opacity-75">
+        <div className="mt-2 flex items-center gap-3 text-xs opacity-70">
           {post.publishedAt ? <span>{formatDate(post.publishedAt)}</span> : null}
         </div>
 
-        {post.excerpt ? <p className="mt-3 text-sm opacity-85">{post.excerpt}</p> : null}
+        {post.excerpt ? <p className="mt-3 text-sm opacity-85 line-clamp-3">{post.excerpt}</p> : null}
 
         <div className="mt-4">
           <Link
