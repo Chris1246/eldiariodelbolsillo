@@ -25,11 +25,11 @@ export default function HeroCard({ post }: { post: Post }) {
   if (!post) return null;
 
   return (
-    <article className="mb-10 rounded-2xl border border-white/10 bg-white/5 p-6">
+    <article className="mb-8 rounded-2xl border border-white/10 bg-white/5 p-4">
       <div className="mb-2 text-xs uppercase tracking-wide opacity-70">Portada del día</div>
 
       {post.mainImageUrl ? (
-        <div className="relative mb-4 h-48 w-full overflow-hidden rounded-lg">
+        <div className="relative mb-3 h-40 w-full overflow-hidden rounded-lg sm:h-48">
           <Image
             src={post.mainImageUrl}
             alt={post.mainImageAlt ?? post.title}
@@ -40,33 +40,35 @@ export default function HeroCard({ post }: { post: Post }) {
         </div>
       ) : null}
 
-      <h2 className="text-2xl font-semibold leading-tight">
-        <Link className="hover:underline" href={`/posts/${post.slug?.current}`}>
-          {post.title}
-        </Link>
-      </h2>
-
-      <div className="mt-3 flex flex-wrap gap-2 text-sm opacity-80">
-        {post.publishedAt ? <span>{formatDate(post.publishedAt)}</span> : null}
+      <div className="flex-1">
         {post.categories?.length ? (
-          <>
-            <span>•</span>
-            <span>
-              {post.categories.map((c) => c?.title).filter(Boolean).join(", ")}
+          <div className="mb-2">
+            <span className="rounded-full border border-white/20 px-2 py-0.5 text-xs uppercase opacity-85">
+              {post.categories[0]?.title}
             </span>
-          </>
+          </div>
         ) : null}
-      </div>
 
-      {post.excerpt ? <p className="mt-4 text-sm opacity-85">{post.excerpt}</p> : null}
+        <h2 className="text-2xl sm:text-3xl font-semibold leading-tight">
+          <Link className="hover:underline" href={`/posts/${post.slug?.current}`}>
+            {post.title}
+          </Link>
+        </h2>
 
-      <div className="mt-4">
-        <Link
-          className="inline-flex items-center rounded-xl border border-white/15 px-4 py-2 text-sm hover:bg-white/10"
-          href={`/posts/${post.slug?.current}`}
-        >
-          Leer →
-        </Link>
+        <div className="mt-2 flex items-center gap-3 text-sm opacity-75">
+          {post.publishedAt ? <span>{formatDate(post.publishedAt)}</span> : null}
+        </div>
+
+        {post.excerpt ? <p className="mt-3 text-sm opacity-85">{post.excerpt}</p> : null}
+
+        <div className="mt-4">
+          <Link
+            className="inline-flex items-center rounded-xl border border-white/15 px-4 py-2 text-sm hover:bg-white/10"
+            href={`/posts/${post.slug?.current}`}
+          >
+            Leer →
+          </Link>
+        </div>
       </div>
     </article>
   );
