@@ -9,11 +9,15 @@ type PageProps = { params: PageParams | Promise<PageParams> };
 
 type Post = {
   title?: string;
+  excerpt?: string;
+  featured?: boolean;
   publishedAt?: string;
   body?: PortableTextBlock[];
   slug?: string;
   author?: { name?: string };
   categories?: { title?: string }[];
+  mainImageUrl?: string;
+  mainImageAlt?: string;
 };
 
 export default async function PostPage({ params }: PageProps) {
