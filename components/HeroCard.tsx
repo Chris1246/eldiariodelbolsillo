@@ -41,7 +41,7 @@ export default function HeroCard({ post }: { post: Post }) {
         </div>
       ) : null}
 
-      <div className="flex-1 min-h-[6rem]">
+      <div className="flex-1 min-h-[5.5rem] sm:min-h-[6.5rem] md:min-h-[7.5rem]">
         <h2 className="text-2xl sm:text-3xl font-semibold leading-tight">
           <Link className="hover:underline" href={`/posts/${post.slug?.current}`}>
             {post.title}
@@ -53,7 +53,7 @@ export default function HeroCard({ post }: { post: Post }) {
           {post.categories?.length ? <CategoryChip variant="accent">{post.categories[0]?.title}</CategoryChip> : null}
         </div>
 
-        {post.excerpt ? <p className="mt-3 text-sm text-white/85 line-clamp-3">{post.excerpt}</p> : <div className="mt-3 min-h-[1.25rem]" /> }
+        {post.excerpt ? <p className="mt-3 text-sm text-white/85 line-clamp-3">{post.excerpt}</p> : <div className="mt-3 min-h-[1.25rem] sm:min-h-[1.5rem] md:min-h-[2rem]" /> }
 
         <div className="mt-4">
           <Link
