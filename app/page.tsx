@@ -111,7 +111,7 @@ export default async function HomePage() {
         <SectionHeader title={`Economía en simple`} href="/posts?category=economia-en-simple" />
         <div className="space-y-3">
           {economiaFinal.length ? (
-            economiaFinal.map((p) => <PostRow key={p._id} post={p} />)
+            economiaFinal.map((p) => <PostRow key={p._id} post={p} chipVariant="accent" />)
           ) : (
             <p className="text-sm opacity-70">Más economía en simple pronto.</p>
           )}

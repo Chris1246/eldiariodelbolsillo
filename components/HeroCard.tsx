@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import CategoryChip from "@/components/CategoryChip";
 
 export type Category = { title?: string; slug?: string };
 
@@ -43,9 +44,7 @@ export default function HeroCard({ post }: { post: Post }) {
       <div className="flex-1">
         {post.categories?.length ? (
           <div className="mb-2">
-            <span className="rounded-full border border-white/20 px-2 py-0.5 text-xs uppercase opacity-85">
-              {post.categories[0]?.title}
-            </span>
+            <CategoryChip variant="accent">{post.categories[0]?.title}</CategoryChip>
           </div>
         ) : null}
 

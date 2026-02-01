@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CategoryChip from "@/components/CategoryChip";
 
 export type Category = { title?: string; slug?: string };
 
@@ -17,7 +18,7 @@ function formatDate(iso?: string) {
   return d.toLocaleDateString("es-CL", { year: "numeric", month: "short", day: "2-digit" });
 }
 
-export default function PostRow({ post }: { post: PostRowItem }) {
+export default function PostRow({ post, chipVariant = "neutral" }: { post: PostRowItem; chipVariant?: "neutral" | "accent" }) {
   return (
     <article className="py-3 border-b border-white/6 last:border-b-0">
       <div className="flex items-start justify-between gap-3">
@@ -37,9 +38,7 @@ export default function PostRow({ post }: { post: PostRowItem }) {
 
         {post.categories?.length ? (
           <div className="shrink-0 ml-2">
-            <span className="rounded-full border border-white/20 px-2 py-0.5 text-xs uppercase opacity-85">
-              {post.categories[0]?.title}
-            </span>
+            <CategoryChip variant={chipVariant}>{post.categories[0]?.title}</CategoryChip>
           </div>
         ) : null}
       </div>
