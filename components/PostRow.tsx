@@ -21,7 +21,7 @@ function formatDate(iso?: string) {
 export default function PostRow({ post, chipVariant = "neutral" }: { post: PostRowItem; chipVariant?: "neutral" | "accent" }) {
   return (
     <article className="py-3 border-b border-white/6 last:border-b-0">
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-start gap-3">
         <div className="flex-1">
           <h4 className="font-medium leading-tight text-base overflow-hidden line-clamp-2">
             <Link className="hover:underline" href={`/posts/${post.slug?.current}`}>
@@ -29,18 +29,13 @@ export default function PostRow({ post, chipVariant = "neutral" }: { post: PostR
             </Link>
           </h4>
 
-          <div className="mt-1 flex items-center gap-3 text-xs opacity-70">
-            {post.publishedAt ? <span>{formatDate(post.publishedAt)}</span> : null}
+          <div className="mt-2 flex items-center gap-2 text-xs text-white/70">
+            {post.publishedAt ? <span className="whitespace-nowrap">{formatDate(post.publishedAt)}</span> : null}
+            {post.categories?.length ? <CategoryChip variant={chipVariant}>{post.categories[0]?.title}</CategoryChip> : null}
           </div>
 
-          {post.excerpt ? <p className="mt-2 text-sm opacity-80 line-clamp-2">{post.excerpt}</p> : null}
+          {post.excerpt ? <p className="mt-2 text-sm text-white/80 line-clamp-2">{post.excerpt}</p> : <div className="mt-2 min-h-[1.25rem]" />}
         </div>
-
-        {post.categories?.length ? (
-          <div className="shrink-0 ml-2">
-            <CategoryChip variant={chipVariant}>{post.categories[0]?.title}</CategoryChip>
-          </div>
-        ) : null}
       </div>
     </article>
   );

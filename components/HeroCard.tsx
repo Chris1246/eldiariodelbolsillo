@@ -41,24 +41,19 @@ export default function HeroCard({ post }: { post: Post }) {
         </div>
       ) : null}
 
-      <div className="flex-1">
-        {post.categories?.length ? (
-          <div className="mb-2">
-            <CategoryChip variant="accent">{post.categories[0]?.title}</CategoryChip>
-          </div>
-        ) : null}
-
+      <div className="flex-1 min-h-[6rem]">
         <h2 className="text-2xl sm:text-3xl font-semibold leading-tight">
           <Link className="hover:underline" href={`/posts/${post.slug?.current}`}>
             {post.title}
           </Link>
         </h2>
 
-        <div className="mt-2 flex items-center gap-3 text-xs opacity-70">
-          {post.publishedAt ? <span>{formatDate(post.publishedAt)}</span> : null}
+        <div className="mt-2 flex items-center gap-2 text-xs text-white/70">
+          {post.publishedAt ? <span className="whitespace-nowrap">{formatDate(post.publishedAt)}</span> : null}
+          {post.categories?.length ? <CategoryChip variant="accent">{post.categories[0]?.title}</CategoryChip> : null}
         </div>
 
-        {post.excerpt ? <p className="mt-3 text-sm opacity-85 line-clamp-3">{post.excerpt}</p> : null}
+        {post.excerpt ? <p className="mt-3 text-sm text-white/85 line-clamp-3">{post.excerpt}</p> : <div className="mt-3 min-h-[1.25rem]" /> }
 
         <div className="mt-4">
           <Link
