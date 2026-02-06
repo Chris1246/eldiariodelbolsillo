@@ -15,6 +15,13 @@ export const POST_BY_SLUG_QUERY = groq`
     author->{name}
   }
 `; 
+export const ALL_PUBLISHED_POSTS = groq`
+  *[_type == "post" && defined(slug.current) && !(_id in path("drafts.**"))]
+    | order(coalesce(publishedAt, _createdAt) desc){
+      "slug": slug.current,
+      publishedAt
+    }
+`;
 export const HOME_QUERY = groq`
 {
   "hero": *[_type == "post" && defined(slug.current) && !(_id in path("drafts.**"))]
